@@ -1,4 +1,4 @@
-package com.alexkirillov.simplewebapp.exception_handling;
+package com.alexkirillov.simplewebapp.exception;
 
 public class NoSuchEmployeeException extends RuntimeException {
     public NoSuchEmployeeException(String message) {

@@ -2,11 +2,12 @@ package com.alexkirillov.simplewebapp.rest;
 
 import com.alexkirillov.simplewebapp.dto.Employee;
 import com.alexkirillov.simplewebapp.dto.MessageDTO;
-import com.alexkirillov.simplewebapp.exception_handling.NoSuchEmployeeException;
+import com.alexkirillov.simplewebapp.exception.NoSuchEmployeeException;
 import com.alexkirillov.simplewebapp.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController("/api")
@@ -48,6 +49,12 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NoSuchEmployeeException.class)
     public MessageDTO employeeIncorrectData(NoSuchEmployeeException e) {
+        return new MessageDTO(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(SQLException.class)
+    public MessageDTO employeeIncorrectData(SQLException e) {
         return new MessageDTO(e.getMessage());
     }
 }

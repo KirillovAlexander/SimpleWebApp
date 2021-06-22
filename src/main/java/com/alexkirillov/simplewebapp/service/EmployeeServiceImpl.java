@@ -2,7 +2,7 @@ package com.alexkirillov.simplewebapp.service;
 
 import com.alexkirillov.simplewebapp.dao.EmployeeDAO;
 import com.alexkirillov.simplewebapp.dto.Employee;
-import com.alexkirillov.simplewebapp.exception_handling.NoSuchEmployeeException;
+import com.alexkirillov.simplewebapp.exception.NoSuchEmployeeException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
