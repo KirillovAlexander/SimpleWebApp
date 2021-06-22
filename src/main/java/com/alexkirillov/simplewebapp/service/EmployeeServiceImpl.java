@@ -2,10 +2,12 @@ package com.alexkirillov.simplewebapp.service;
 
 import com.alexkirillov.simplewebapp.dao.EmployeeDAO;
 import com.alexkirillov.simplewebapp.dto.Employee;
+import com.alexkirillov.simplewebapp.exception_handling.NoSuchEmployeeException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -25,13 +27,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     @Transactional
     public Employee getEmployee(int id) {
-        return employeeDAO.getEmployee(id);
+        Optional<Employee> optional = employeeDAO.getEmployee(id);
+        return optional.orElseThrow(() -> new NoSuchEmployeeException("Employee with id " + id + " not founded."));
     }
 
     @Override
     @Transactional
-    public void saveEmployee(Employee employee) {
-        employeeDAO.saveEmployee(employee);
+    public Employee addEmployee(Employee employee) {
+        return employeeDAO.addEmployee(employee);
+    }
+
+    @Override
+    @Transactional
+    public Employee updateEmployee(Employee employee) {
+        return employeeDAO.addEmployee(employee);
     }
 
     @Override
