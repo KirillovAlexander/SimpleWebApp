@@ -38,6 +38,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Employee"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error customer message
     put:
       summary: Update Employee
       description: Call to update Employee info
