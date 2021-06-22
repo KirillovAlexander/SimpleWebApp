@@ -1,0 +1,165 @@
+openapi: 3.0.0
+info:
+  title: Employee service API
+  description: Employee service API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080/employees'
+    description: local server
+paths:
+  /employees:
+    get:
+      summary: Get all Employees
+      description: Call to get the list of employees
+      responses:
+        '200':
+          description: List of employees
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {
+                  $ref: "#/components/schemas/Employee"
+                }
+    post:
+      summary: Add new Employee
+      description: Call to create new Employee
+      requestBody:
+        description: Employee info without id
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewEmployee"
+      responses:
+        '200':
+          description: Employee info with ID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+    put:
+      summary: Update Employee
+      description: Call to update Employee info
+      requestBody:
+        description: Employee info with id
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Employee"
+      responses:
+        '200':
+          description: Employee info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        '400':
+          description: Error input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error customer message
+  /employees/{id}:
+    get:
+      summary: Get an Employee by ID
+      description: Call to get an employee by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Employee info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Employee"
+        '400':
+          description: Error input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error customer message
+    delete:
+      summary: Delete employee by ID
+      description: Call to delete employee
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success confirmation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Success confirmation message
+        '400':
+          description: Error input data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error customer message
+components:
+  schemas:
+    Employee:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Employee id
+        firstName:
+          type: string
+          description: Employee name
+        lastName:
+          type: string
+          description: Employee surname
+        departmentId:
+          type: integer
+          description: Employee department id
+        jobTitle:
+          type: string
+          description: Employee job title
+        gender:
+          type: string
+          description: Employee gender
+    NewEmployee:
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: Employee name
+        lastName:
+          type: string
+          description: Employee surname
+        departmentId:
+          type: integer
+          description: Employee department id
+        jobTitle:
+          type: string
+          description: Employee job title
+        gender:
+          type: string
+          description: Employee gender
