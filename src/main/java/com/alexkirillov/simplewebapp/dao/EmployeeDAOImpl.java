@@ -2,8 +2,10 @@ package com.alexkirillov.simplewebapp.dao;
 
 import com.alexkirillov.simplewebapp.dto.Employee;
 import com.alexkirillov.simplewebapp.exception.NoSuchEmployeeException;
+import com.alexkirillov.simplewebapp.exception.SQLInsertException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,17 +25,20 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
 
     @Override
+    @Transactional
     public List<Employee> getAllEmployees() {
         return jdbcTemplate.query("SELECT * FROM Employee", new EmployeeMapper());
     }
 
     @Override
+    @Transactional
     public Optional<Employee> getEmployee(int id) {
         return jdbcTemplate.query("SELECT * FROM Employee WHERE employee_id=?", new EmployeeMapper(), id)
                 .stream().findAny();
     }
 
     @Override
+    @Transactional
     public Employee addEmployee(Employee employee) {
         String sqlInsert = "INSERT INTO employee (first_name, last_name, department_id, job_title, gender) VALUES (?, ?, ?, ?, ?)";
         try {
@@ -47,14 +52,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows == 0) {
-                throw new SQLException("Creating user failed, no rows affected.");
+                throw new SQLInsertException("Creating user failed, no rows affected.");
             }
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     employee.setId(generatedKeys.getInt(1));
                 }
                 else {
-                    throw new SQLException("Creating user failed, no ID obtained.");
+                    throw new SQLInsertException("Creating user failed, no ID obtained.");
                 }
             }
         } catch (SQLException throwable) {
@@ -64,6 +69,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
+    @Transactional
     public Employee updateEmployee(Employee employee) {
         Optional<Employee> optional = jdbcTemplate.query("SELECT * FROM Employee WHERE employee_id=?", new EmployeeMapper(), employee.getId())
                 .stream().findAny();
@@ -77,6 +83,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
+    @Transactional
     public void deleteEmployee(int id) {
         Optional<Employee> optional = jdbcTemplate.query("SELECT * FROM Employee WHERE employee_id=?", new EmployeeMapper(), id)
                 .stream().findAny();

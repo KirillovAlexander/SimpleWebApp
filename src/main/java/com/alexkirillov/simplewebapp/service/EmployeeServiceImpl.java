@@ -19,32 +19,27 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional
     public List<Employee> getAllEmployees() {
         return employeeDAO.getAllEmployees();
     }
 
     @Override
-    @Transactional
     public Employee getEmployee(int id) {
         Optional<Employee> optional = employeeDAO.getEmployee(id);
         return optional.orElseThrow(() -> new NoSuchEmployeeException("Employee with id " + id + " not founded."));
     }
 
     @Override
-    @Transactional
     public Employee addEmployee(Employee employee) {
         return employeeDAO.addEmployee(employee);
     }
 
     @Override
-    @Transactional
     public Employee updateEmployee(Employee employee) {
         return employeeDAO.updateEmployee(employee);
     }
 
     @Override
-    @Transactional
     public void deleteEmployee(int id) {
         employeeDAO.deleteEmployee(id);
     }
