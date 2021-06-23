@@ -1,12 +1,25 @@
 package com.alexkirillov.simplewebapp.dto;
 
-import com.alexkirillov.simplewebapp.dto.Gender;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
+@Validated
 public class Employee {
+
+    @NotNull
+    @Positive
     private int id;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
+    @NotNull
+    @Positive
     private int departmentId;
+    @NotNull
     private String jobTitle;
     private Gender gender;
 

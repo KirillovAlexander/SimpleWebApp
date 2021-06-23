@@ -6,10 +6,14 @@ import com.alexkirillov.simplewebapp.exception.NoSuchEmployeeException;
 import com.alexkirillov.simplewebapp.exception.SQLInsertException;
 import com.alexkirillov.simplewebapp.service.EmployeeService;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
+@Validated
 @RestController("/api")
 public class EmployeeController {
     private final EmployeeService employeeService;
@@ -24,7 +28,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/{id}")
-    public Employee getEmployee(@PathVariable int id) {
+    public Employee getEmployee(@NotNull @Positive @PathVariable int id) {
         return employeeService.getEmployee(id);
     }
 
@@ -41,7 +45,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/employees/{id}")
-    public MessageDTO deleteEmployee(@PathVariable int id) {
+    public MessageDTO deleteEmployee(@NotNull @Positive @PathVariable int id) {
         employeeService.deleteEmployee(id);
         return new MessageDTO("Employee with id = " + id + " was deleted");
     }
