@@ -1,6 +1,6 @@
 //функция получение индекса объекта в массиве
 function getIndex(list, id) {
-    for(var i = 0; i < list.lenght; ++i) {
+    for(var i = 0; i < list.length; i++) {
         if(list[i].id === id)
             return i;
     }
@@ -64,15 +64,11 @@ Vue.component('employees-list', {
         '</div>',
     methods: {
         save: function() {
-            //так как мы находимся в методе редактирования message, то необходимо брать его текущие поля,
-            //а они у нас находятся в опции data данного компонента
-            //если в элемент EditText не помещён message для редактирования, то поле message_id = 0
             if(this.id == 0) {
-                //в методе save() передаём только поле message_text, т.к. поле id, будет изменено
-                //на стороне сервера и в ответе мы уже получим полноценный message с уcтановленным id
                 employeeApi.save({}, { firstName: this.firstName, lastName: this.lastName, departmentId: this.departmentId, jobTitle: this.jobTitle, gender: this.gender }).then(result =>
                     result.json().then(data => {
                         this.employees.push(data);
+                        this.id = 0,
                         this.firstName = '';
                         this.lastName = '';
                         this.departmentId ='';
@@ -81,13 +77,11 @@ Vue.component('employees-list', {
                     })
                 );
             } else {
-                //в параметре метода update() нам снова не нужен целый объект message, используем только поле
-                // message_text, поле id будет установлено на сервере из первого параметра update()
                 employeeApi.update({}, { id: this.id, firstName: this.firstName, lastName: this.lastName, departmentId: this.departmentId, jobTitle: this.jobTitle, gender: this.gender }).then(result =>
                     result.json().then(data => {
-                        //в data нам вернулся изменённый объект message, находим его индекс в массиве messages
-                        var index = getIndex(this.employees, data.id);
-                        //старый message удаляем из messages, а на его место вставляем новый объект с сервера
+                        //в data нам вернулся изменённый объект employee, находим его индекс в массиве employees
+                        var index = getIndex(this.employees, this.id);
+                        //старый employee удаляем из employees, а на его место вставляем новый объект с сервера
                         this.employees.splice(index, 1, data);
                         this.firstName = '';
                         this.lastName = '';

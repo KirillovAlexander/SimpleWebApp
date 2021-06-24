@@ -27,7 +27,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
     @Transactional
     public List<Employee> getAllEmployees() {
-        return jdbcTemplate.query("SELECT * FROM Employee", new EmployeeMapper());
+        return jdbcTemplate.query("SELECT * FROM Employee ORDER BY employee_id", new EmployeeMapper());
     }
 
     @Override

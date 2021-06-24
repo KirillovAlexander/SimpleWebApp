@@ -17,14 +17,14 @@ public class EmployeeGlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(NoSuchEmployeeException.class)
     public MessageDTO employeeIncorrectData(NoSuchEmployeeException e) {
-        logger.error("EmployeeGlobalExceptionHandler: " + e.getMessage());
+        logger.error("employeeIncorrectData: " + e.getMessage());
         return new MessageDTO(e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(SQLInsertException.class)
     public MessageDTO insertSQLException(SQLInsertException e) {
-        logger.error("EmployeeGlobalExceptionHandler: " + e.getMessage());
+        logger.error("insertSQLException: " + e.getMessage());
         return new MessageDTO(e.getMessage());
     }
 }
