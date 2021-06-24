@@ -33,6 +33,6 @@ Rest-сервис для интеграции со сторонними прил
 для подключения к БД на `spring.datasource.url=jdbc:postgresql://localhost:5432/employeedb`,
 так как по умолчанию указан доступ к БД из docker-контейнера.
 
-##Swagger UI
+## Swagger UI
 После запуска приложения по адресу `http://localhost:8080/swagger-ui.html` доступна OpenAPI 3 документация.
 
