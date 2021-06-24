@@ -7,7 +7,7 @@ function getIndex(list, id) {
     return -1;
 }
 
-var employeeApi = Vue.resource('/employees{/id}');
+var employeeApi = Vue.resource('/api/employees{/id}');
 
 Vue.component('employees-list', {
     props: {

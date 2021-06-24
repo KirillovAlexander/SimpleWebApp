@@ -15,7 +15,8 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 
 @Validated
-@RestController("/api")
+@RestController
+@RequestMapping("/api/employees")
 public class EmployeeController {
     private final EmployeeService employeeService;
 
@@ -23,27 +24,27 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @GetMapping("/employees")
+    @GetMapping
     public List<Employee> showAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
-    @GetMapping("/employees/{id}")
+    @GetMapping("/{id}")
     public Employee getEmployee(@NotNull @Positive @PathVariable int id) {
         return employeeService.getEmployee(id);
     }
 
-    @PostMapping("/employees")
+    @PostMapping
     public Employee addEmployee(@Valid @RequestBody Employee employee) {
         return employeeService.addEmployee(employee);
     }
 
-    @PutMapping("/employees")
+    @PutMapping
     public Employee updateEmployee(@RequestBody Employee employee) {
         return employeeService.updateEmployee(employee);
     }
 
-    @DeleteMapping("/employees/{id}")
+    @DeleteMapping("/{id}")
     public MessageDTO deleteEmployee(@NotNull @Positive @PathVariable int id) {
         employeeService.deleteEmployee(id);
         return new MessageDTO("Employee with id = " + id + " was deleted");
