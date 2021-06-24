@@ -1,7 +1,6 @@
 package com.alexkirillov.simplewebapp.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;

@@ -3,7 +3,6 @@ package com.alexkirillov.simplewebapp.service;
 import com.alexkirillov.simplewebapp.dao.EmployeeDAO;
 import com.alexkirillov.simplewebapp.dto.Employee;
 import com.alexkirillov.simplewebapp.exception.NoSuchEmployeeException;
-import com.alexkirillov.simplewebapp.exception.handling.EmployeeGlobalExceptionHandler;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 

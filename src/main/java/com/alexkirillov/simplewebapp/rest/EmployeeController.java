@@ -2,10 +2,7 @@ package com.alexkirillov.simplewebapp.rest;
 
 import com.alexkirillov.simplewebapp.dto.Employee;
 import com.alexkirillov.simplewebapp.dto.MessageDTO;
-import com.alexkirillov.simplewebapp.exception.NoSuchEmployeeException;
-import com.alexkirillov.simplewebapp.exception.SQLInsertException;
 import com.alexkirillov.simplewebapp.service.EmployeeService;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
