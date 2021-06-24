@@ -1,175 +1,196 @@
-openapi: 3.0.0
+openapi: 3.0.1
 info:
-  title: Employee service API
-  description: Employee service API
-  version: 1.0.0
+  title: OpenAPI definition
+  version: v0
 servers:
-  - url: 'http://localhost:8080/employees'
-    description: local server
+  - url: http://localhost:8080
+    description: Generated server url
 paths:
-  /employees:
+  /api/employees:
     get:
       summary: Get all Employees
       description: Call to get the list of employees
+      tags:
+        - employee-controller
+      operationId: showAllEmployees
       responses:
-        '200':
-          description: List of employees
+        "400":
+          description: Bad Request
           content:
-            application/json:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Message'
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Message'
+        "200":
+          description: OK
+          content:
+            '*/*':
               schema:
                 type: array
-                items: {
-                  $ref: "#/components/schemas/Employee"
-                }
-    post:
+                items:
+                  $ref: '#/components/schemas/Employee'
+    put:
       summary: Add new Employee
       description: Call to create new Employee
+      tags:
+        - employee-controller
+      operationId: updateEmployee
       requestBody:
-        description: Employee info without id
-        required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewEmployee"
+              $ref: '#/components/schemas/Employee'
+        required: true
       responses:
-        '200':
-          description: Employee info with ID
+        "400":
+          description: Bad Request
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Employee"
-        '500':
-          description: Internal server error
+                $ref: '#/components/schemas/Message'
+        "500":
+          description: Internal Server Error
           content:
-            application/json:
+            '*/*':
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: Error customer message
-    put:
+                $ref: '#/components/schemas/Message'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Employee'
+    post:
       summary: Update Employee
       description: Call to update Employee info
+      tags:
+        - employee-controller
+      operationId: addEmployee
       requestBody:
-        description: Employee info with id
-        required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Employee"
+              $ref: '#/components/schemas/Employee'
+        required: true
       responses:
-        '200':
-          description: Employee info
+        "400":
+          description: Bad Request
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Employee"
-        '400':
-          description: Error input data
+                $ref: '#/components/schemas/Message'
+        "500":
+          description: Internal Server Error
           content:
-            application/json:
+            '*/*':
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: Error customer message
-  /employees/{id}:
+                $ref: '#/components/schemas/Message'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Employee'
+  /api/employees/{id}:
     get:
       summary: Get an Employee by ID
       description: Call to get an employee by id
+      tags:
+        - employee-controller
+      operationId: getEmployee
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           required: true
           schema:
             type: integer
+            format: int32
       responses:
-        '200':
-          description: Employee info
+        "400":
+          description: Bad Request
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: "#/components/schemas/Employee"
-        '400':
-          description: Error input data
+                $ref: '#/components/schemas/Message'
+        "500":
+          description: Internal Server Error
           content:
-            application/json:
+            '*/*':
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: Error customer message
+                $ref: '#/components/schemas/Message'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Employee'
     delete:
       summary: Delete employee by ID
       description: Call to delete employee
+      tags:
+        - employee-controller
+      operationId: deleteEmployee
       parameters:
-        - in: path
-          name: id
+        - name: id
+          in: path
           required: true
           schema:
             type: integer
+            format: int32
       responses:
-        '200':
-          description: Success confirmation
+        "400":
+          description: Bad Request
           content:
-            application/json:
+            '*/*':
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: Success confirmation message
-        '400':
-          description: Error input data
+                $ref: '#/components/schemas/Message'
+        "500":
+          description: Internal Server Error
           content:
-            application/json:
+            '*/*':
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    description: Error customer message
+                $ref: '#/components/schemas/Message'
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Message'
 components:
   schemas:
     Employee:
+      required:
+        - departmentId
+        - firstName
+        - jobTitle
+        - lastName
       type: object
       properties:
         id:
           type: integer
-          description: Employee id
+          format: int32
         firstName:
           type: string
-          description: Employee name
         lastName:
           type: string
-          description: Employee surname
         departmentId:
           type: integer
-          description: Employee department id
+          format: int32
         jobTitle:
           type: string
-          description: Employee job title
         gender:
           type: string
-          description: Employee gender
-    NewEmployee:
+          enum:
+            - MALE
+            - FEMALE
+
+    Message:
       type: object
       properties:
-        firstName:
+        message:
           type: string
-          description: Employee name
-        lastName:
-          type: string
-          description: Employee surname
-        departmentId:
-          type: integer
-          description: Employee department id
-        jobTitle:
-          type: string
-          description: Employee job title
-        gender:
-          type: string
-          description: Employee gender

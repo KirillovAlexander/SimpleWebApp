@@ -6,7 +6,6 @@ import com.alexkirillov.simplewebapp.exception.NoSuchEmployeeException;
 import com.alexkirillov.simplewebapp.exception.handling.EmployeeGlobalExceptionHandler;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
