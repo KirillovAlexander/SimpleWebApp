@@ -16,7 +16,9 @@ REST-сервис, предоставляющий интерфейс для ра
 
 Сервис реализует методы для работы с базой сотрудников, описанные в [протоколе](https://github.com/KirillovAlexander/SimpleWebApp/blob/master/EmployeeServiceSpecification.yaml).
 
-По умолчанию приложение запускается на `http://localhost:8080/`.
+По умолчанию приложение запускается по адресу `http://localhost:8080/`.
+
+Rest-сервис для интеграции со сторонними приложениями доступен по адресу `http://localhost:8080/api/employees`.
 
 Для запуска должна быть развернута Postgres с базой `employeedb` на порту `5432`. В файле `application.property` необходимо указать данные для подключения к БД в полях
 `spring.datasource.username` и `spring.datasource.password`. По умолчанию там указаны значения `HR` и `HR` соответственно.
@@ -27,8 +29,9 @@ REST-сервис, предоставляющий интерфейс для ра
 Затем запустить сервис с помощью команды `docker-compose up -d`.
 
 ## Запуск на локальной машине
-Для запуска на локальной машине необходимо изменить значение property для подключения к БД на `spring.datasource.url=jdbc:postgresql://localhost:5432/employeedb`,
-так как по умолчанию указан доступ из docker-контейнера.
+Для запуска на локальной машине необходимо изменить значение property в файле `application.property`
+для подключения к БД на `spring.datasource.url=jdbc:postgresql://localhost:5432/employeedb`,
+так как по умолчанию указан доступ к БД из docker-контейнера.
 
 ##Swagger UI
 После запуска приложения по адресу `http://localhost:8080/swagger-ui.html` доступна OpenAPI 3 документация.
