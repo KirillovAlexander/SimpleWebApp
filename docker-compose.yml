@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  employee_service:
+    image: simple_web_app:v.1
+    ports:
+      - 8080:8080
