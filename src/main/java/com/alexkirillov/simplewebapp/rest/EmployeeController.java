@@ -50,15 +50,4 @@ public class EmployeeController {
         return new MessageDTO("Employee with id = " + id + " was deleted");
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NoSuchEmployeeException.class)
-    public MessageDTO employeeIncorrectData(NoSuchEmployeeException e) {
-        return new MessageDTO(e.getMessage());
-    }
-
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(SQLInsertException.class)
-    public MessageDTO employeeIncorrectData(SQLInsertException e) {
-        return new MessageDTO(e.getMessage());
-    }
 }
