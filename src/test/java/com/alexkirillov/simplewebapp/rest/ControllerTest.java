@@ -2,7 +2,7 @@ package com.alexkirillov.simplewebapp.rest;
 
 import com.alexkirillov.simplewebapp.dto.Employee;
 import com.alexkirillov.simplewebapp.dto.Gender;
-import com.alexkirillov.simplewebapp.exception.NoSuchEmployeeException;
+import com.alexkirillov.simplewebapp.exception.EmployeeServiceNotFoundException;
 import com.alexkirillov.simplewebapp.service.EmployeeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -95,7 +95,7 @@ public class ControllerTest {
     @Test
     public void whenGetEmployeeByNonExistentID_thenClientError() throws Exception {
         int is400 = 1;
-        when(employeeService.getEmployee(is400)).thenThrow(new NoSuchEmployeeException("No such employee exception"));
+        when(employeeService.getEmployee(is400)).thenThrow(new EmployeeServiceNotFoundException("No such employee exception"));
         mockMvc.perform(get("/employees/" + is400))
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$").exists())

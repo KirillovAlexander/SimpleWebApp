@@ -1,8 +1,8 @@
 package com.alexkirillov.simplewebapp.dao;
 
 import com.alexkirillov.simplewebapp.dto.Employee;
-import com.alexkirillov.simplewebapp.exception.NoSuchEmployeeException;
-import com.alexkirillov.simplewebapp.exception.SQLInsertException;
+import com.alexkirillov.simplewebapp.exception.EmployeeServiceNotFoundException;
+import com.alexkirillov.simplewebapp.exception.EmployeeServiceException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,18 +52,18 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows == 0) {
-                throw new SQLInsertException("Creating user failed, no rows affected.");
+                throw new EmployeeServiceException("Creating user failed, no rows affected.");
             }
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     employee.setId(generatedKeys.getInt(1));
                 }
                 else {
-                    throw new SQLInsertException("Creating user failed, no ID obtained.");
+                    throw new EmployeeServiceException("Creating user failed, no ID obtained.");
                 }
             }
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
         return employee;
     }
@@ -74,7 +74,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         Optional<Employee> optional = jdbcTemplate.query("SELECT * FROM Employee WHERE employee_id=?", new EmployeeMapper(), employee.getId())
                 .stream().findAny();
         if (optional.isEmpty())
-            throw new NoSuchEmployeeException("Employee with id " + employee.getId() + " not founded.");
+            throw new EmployeeServiceNotFoundException("Employee with id " + employee.getId() + " not founded.");
         jdbcTemplate.update("UPDATE employee SET first_name=?, last_name=?, department_id=?, job_title=?, gender=?" +
                         " WHERE employee_id=?",
                 employee.getFirstName(), employee.getLastName(), employee.getDepartmentId(), employee.getJobTitle(), employee.getGender().toString(),
@@ -87,7 +87,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public void deleteEmployee(int id) {
         Optional<Employee> optional = jdbcTemplate.query("SELECT * FROM Employee WHERE employee_id=?", new EmployeeMapper(), id)
                 .stream().findAny();
-        if (optional.isEmpty()) throw new NoSuchEmployeeException("Employee with id " + id + " not founded.");
+        if (optional.isEmpty()) throw new EmployeeServiceNotFoundException("Employee with id " + id + " not founded.");
         jdbcTemplate.update("DELETE FROM employee WHERE employee_id=?", id);
     }
 }

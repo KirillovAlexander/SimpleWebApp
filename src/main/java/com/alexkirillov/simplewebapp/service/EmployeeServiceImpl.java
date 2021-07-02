@@ -2,7 +2,7 @@ package com.alexkirillov.simplewebapp.service;
 
 import com.alexkirillov.simplewebapp.dao.EmployeeDAO;
 import com.alexkirillov.simplewebapp.dto.Employee;
-import com.alexkirillov.simplewebapp.exception.NoSuchEmployeeException;
+import com.alexkirillov.simplewebapp.exception.EmployeeServiceNotFoundException;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee getEmployee(int id) {
         logger.info("getEmployee(id) with id = " + id);
         Optional<Employee> optional = employeeDAO.getEmployee(id);
-        return optional.orElseThrow(() -> new NoSuchEmployeeException("Employee with id " + id + " not founded."));
+        return optional.orElseThrow(() -> new EmployeeServiceNotFoundException("Employee with id " + id + " not founded."));
     }
 
     @Override

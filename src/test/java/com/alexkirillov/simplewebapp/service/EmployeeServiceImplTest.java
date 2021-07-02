@@ -1,7 +1,7 @@
 package com.alexkirillov.simplewebapp.service;
 
 import com.alexkirillov.simplewebapp.dao.EmployeeDAO;
-import com.alexkirillov.simplewebapp.exception.NoSuchEmployeeException;
+import com.alexkirillov.simplewebapp.exception.EmployeeServiceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -24,7 +24,7 @@ class EmployeeServiceImplTest {
 
     @Test
     void getEmployee() {
-        Throwable thrown = assertThrows(NoSuchEmployeeException.class, () -> employeeService.getEmployee(0));
+        Throwable thrown = assertThrows(EmployeeServiceNotFoundException.class, () -> employeeService.getEmployee(0));
         assertNotNull(thrown.getMessage());
     }
 }
