@@ -39,7 +39,7 @@ public class EmployeeServiceGlobalExceptionHandler {
 
     private String getStackTraceMessage(Throwable exception) {
         StringBuilder sb = new StringBuilder();
-        Arrays.stream(exception.getStackTrace()).forEach((item) -> {
+        Arrays.stream(exception.getStackTrace()).forEachOrdered((item) -> {
             sb.append("\n");
             sb.append(item);
         });

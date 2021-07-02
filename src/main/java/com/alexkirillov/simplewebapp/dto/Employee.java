@@ -18,7 +18,7 @@ public class Employee {
     private int departmentId;
     @NotNull
     private String jobTitle;
-    @JsonDeserialize(using = GenderDeserializer.class)
+
     private Gender gender;
 
     public Employee() {
