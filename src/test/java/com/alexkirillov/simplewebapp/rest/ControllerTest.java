@@ -123,7 +123,7 @@ public class ControllerTest {
 
     @Test
     public void givenEmployee_whenUpdate_thenStatusOkAndEmployeeReturned() throws Exception {
-        when(employeeService.updateEmployee(testEmployee)).thenReturn(testEmployee);
+        when(employeeService.updateEmployee(testEmployee.getId(), testEmployee)).thenReturn(testEmployee);
         ObjectMapper mapper = new ObjectMapper();
         String testEmployeeAsJson = mapper.writeValueAsString(testEmployee);
         mockMvc.perform(post("/employees")

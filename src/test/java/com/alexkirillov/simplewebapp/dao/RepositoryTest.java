@@ -92,7 +92,7 @@ public class RepositoryTest {
         testEmployee.setJobTitle("TestJobTitleUpd");
         testEmployee.setGender(Gender.MALE);
 
-        employeeDAO.updateEmployee(testEmployee);
+        employeeDAO.updateEmployee(testEmployee.getId(), testEmployee);
         Optional<Employee> optional = employeeDAO.getEmployee(testEmployee.getId());
         assertThat(optional.isPresent(), is(equalTo(true)));
         Employee employee = optional.get();

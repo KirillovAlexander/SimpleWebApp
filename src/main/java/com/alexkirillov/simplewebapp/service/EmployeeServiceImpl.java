@@ -39,9 +39,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee updateEmployee(Employee employee) {
+    public Employee updateEmployee(int id, Employee employee) {
         logger.info("updateEmployee(employee) with employee = " + employee);
-        return employeeDAO.updateEmployee(employee);
+        return employeeDAO.updateEmployee(id, employee);
     }
 
     @Override

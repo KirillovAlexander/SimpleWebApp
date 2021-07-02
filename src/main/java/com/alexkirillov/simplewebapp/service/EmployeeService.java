@@ -9,7 +9,7 @@ public interface EmployeeService {
 
     Employee addEmployee(Employee employee);
 
-    Employee updateEmployee(Employee employee);
+    Employee updateEmployee(int id, Employee employee);
 
     Employee getEmployee(int id);
 

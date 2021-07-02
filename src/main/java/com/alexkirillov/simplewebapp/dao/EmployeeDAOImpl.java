@@ -70,8 +70,8 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     @Transactional
-    public Employee updateEmployee(Employee employee) {
-        Optional<Employee> optional = jdbcTemplate.query("SELECT * FROM Employee WHERE employee_id=?", new EmployeeMapper(), employee.getId())
+    public Employee updateEmployee(int id, Employee employee) {
+        Optional<Employee> optional = jdbcTemplate.query("SELECT * FROM Employee WHERE employee_id=?", new EmployeeMapper(), id)
                 .stream().findAny();
         if (optional.isEmpty())
             throw new EmployeeServiceNotFoundException("Employee with id " + employee.getId() + " not founded.");

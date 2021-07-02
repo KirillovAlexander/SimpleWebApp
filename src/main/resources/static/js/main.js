@@ -77,7 +77,7 @@ Vue.component('employees-list', {
                     })
                 );
             } else {
-                employeeApi.update({}, { id: this.id, firstName: this.firstName, lastName: this.lastName, departmentId: this.departmentId, jobTitle: this.jobTitle, gender: this.gender }).then(result =>
+                employeeApi.update({ id: this.id }, { id: this.id, firstName: this.firstName, lastName: this.lastName, departmentId: this.departmentId, jobTitle: this.jobTitle, gender: this.gender }).then(result =>
                     result.json().then(data => {
                         //в data нам вернулся изменённый объект employee, находим его индекс в массиве employees
                         var index = getIndex(this.employees, this.id);
