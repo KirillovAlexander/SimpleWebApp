@@ -1,1 +1,1 @@
-TRUNCATE employee;
+TRUNCATE employees;

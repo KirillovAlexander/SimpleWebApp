@@ -1,6 +1,6 @@
 package com.alexkirillov.simplewebapp.service;
 
-import com.alexkirillov.simplewebapp.dao.EmployeeDAO;
+import com.alexkirillov.simplewebapp.dao.EmployeeRepository;
 import com.alexkirillov.simplewebapp.dto.Employee;
 import com.alexkirillov.simplewebapp.exception.EmployeeServiceNotFoundException;
 import org.apache.log4j.Logger;
@@ -13,40 +13,41 @@ import java.util.Optional;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final static Logger logger = Logger.getLogger(EmployeeServiceImpl.class);
-    private final EmployeeDAO employeeDAO;
+    private final EmployeeRepository employeeRepository;
 
-    public EmployeeServiceImpl(EmployeeDAO employeeDAO) {
-        this.employeeDAO = employeeDAO;
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
     }
 
     @Override
     public List<Employee> getAllEmployees() {
         logger.info("getAllEmployees()");
-        return employeeDAO.getAllEmployees();
+        return employeeRepository.findAll();
     }
 
     @Override
-    public Employee getEmployee(int id) {
+    public Employee getEmployee(long id) {
         logger.info("getEmployee(id) with id = " + id);
-        Optional<Employee> optional = employeeDAO.getEmployee(id);
+        Optional<Employee> optional = employeeRepository.findById(id);
         return optional.orElseThrow(() -> new EmployeeServiceNotFoundException("Employee with id " + id + " not founded."));
     }
 
     @Override
     public Employee addEmployee(Employee employee) {
         logger.info("addEmployee(employee) with employee = " + employee);
-        return employeeDAO.addEmployee(employee);
+        return employeeRepository.save(employee);
     }
 
     @Override
-    public Employee updateEmployee(int id, Employee employee) {
+    public Employee updateEmployee(long id, Employee employee) {
+        employee.setId(id);
         logger.info("updateEmployee(employee) with employee = " + employee);
-        return employeeDAO.updateEmployee(id, employee);
+        return employeeRepository.save(employee);
     }
 
     @Override
-    public void deleteEmployee(int id) {
+    public void deleteEmployee(long id) {
         logger.info("deleteEmployee(id) with id = " + id);
-        employeeDAO.deleteEmployee(id);
+        employeeRepository.deleteById(id);
     }
 }

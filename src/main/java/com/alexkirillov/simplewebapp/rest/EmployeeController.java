@@ -27,7 +27,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployee(@NotNull @Positive @PathVariable int id) {
+    public Employee getEmployee(@NotNull @Positive @PathVariable long id) {
         return employeeService.getEmployee(id);
     }
 
@@ -37,12 +37,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployee(@NotNull @Positive @PathVariable int id, @RequestBody Employee employee) {
+    public Employee updateEmployee(@NotNull @Positive @PathVariable long id, @RequestBody Employee employee) {
         return employeeService.updateEmployee(id, employee);
     }
 
     @DeleteMapping("/{id}")
-    public MessageDTO deleteEmployee(@NotNull @Positive @PathVariable int id) {
+    public MessageDTO deleteEmployee(@NotNull @Positive @PathVariable long id) {
         employeeService.deleteEmployee(id);
         return new MessageDTO("Employee with id = " + id + " was deleted");
     }

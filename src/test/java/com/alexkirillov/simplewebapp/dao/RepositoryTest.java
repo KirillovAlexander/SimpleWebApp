@@ -9,8 +9,6 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestMethod;
-import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -19,7 +17,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 /*
     Tests use data from test/resources/db/changelog/v-1.1/10-insert-employee-data.sql
@@ -31,7 +30,7 @@ import static org.hamcrest.Matchers.*;
 public class RepositoryTest {
 
     @Autowired
-    EmployeeDAO employeeDAO;
+    EmployeeRepository employeeRepository;
 
     @Container
     public static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13")
@@ -46,27 +45,25 @@ public class RepositoryTest {
                     "spring.datasource.username=" + postgreSQLContainer.getUsername(),
                     "spring.datasource.password=" + postgreSQLContainer.getPassword(),
                     "spring.liquibase.enabled=true",
-                    "spring.liquibase.change-log=classpath:db/changelog/db.changelog-test.xml"
+                    "spring.liquibase.change-log=classpath:db/changelog/db.changelog-test.xml",
+                    "spring.jpa.hibernate.ddl-auto=validate"
             ).applyTo(configurableApplicationContext.getEnvironment());
         }
     }
 
     @Test
-    @Transactional
     public void givenID_whenGetEmployee_thenEmployeeReturned() {
-        Optional<Employee> optional = employeeDAO.getEmployee(1);
+        Optional<Employee> optional = employeeRepository.findById(1L);
         assertThat(optional.isPresent(), is(equalTo(true)));
     }
 
     @Test
-    @Transactional
     public void whenGetAllEmployees_thenListReturned() {
-        List<Employee> employees = employeeDAO.getAllEmployees();
+        List<Employee> employees = employeeRepository.findAll();
         assertThat(employees.size(), is(equalTo(2)));
     }
 
     @Test
-    @Transactional
     public void givenEmployee_whenAddEmployee_thenEmployeeExist() {
         Employee testEmployee = new Employee();
         testEmployee.setFirstName("TestName");
@@ -75,25 +72,23 @@ public class RepositoryTest {
         testEmployee.setJobTitle("TestJobTitle");
         testEmployee.setGender(Gender.FEMALE);
 
-        employeeDAO.addEmployee(testEmployee);
-        Optional<Employee> optional = employeeDAO.getEmployee(3);
+        employeeRepository.save(testEmployee);
+        Optional<Employee> optional = employeeRepository.findById(3L);
         assertThat(optional.isPresent(), is(equalTo(true)));
     }
 
     @Test
-    @Transactional
-    @AfterTestMethod("givenEmployee_whenAddEmployee_thenEmployeeExist")
     public void givenEmployee_whenUpdate_thenEmployeeExistAndReturned() {
         Employee testEmployee = new Employee();
-        testEmployee.setId(3);
+        testEmployee.setId(2L);
         testEmployee.setFirstName("TestNameUpd");
         testEmployee.setLastName("TestLastNameUpd");
         testEmployee.setDepartmentId(2);
         testEmployee.setJobTitle("TestJobTitleUpd");
         testEmployee.setGender(Gender.MALE);
 
-        employeeDAO.updateEmployee(testEmployee.getId(), testEmployee);
-        Optional<Employee> optional = employeeDAO.getEmployee(testEmployee.getId());
+        employeeRepository.save(testEmployee);
+        Optional<Employee> optional = employeeRepository.findById(testEmployee.getId());
         assertThat(optional.isPresent(), is(equalTo(true)));
         Employee employee = optional.get();
         assertThat(employee.getFirstName(), is(equalTo(testEmployee.getFirstName())));
@@ -104,11 +99,9 @@ public class RepositoryTest {
     }
 
     @Test
-    @Transactional
-    @AfterTestMethod("givenEmployee_whenUpdate_thenEmployeeExistAndReturned")
     public void givenEmployeeId_whenDelete_thenEmployeeNotExist() {
-        employeeDAO.deleteEmployee(3);
-        Optional<Employee> optional = employeeDAO.getEmployee(3);
+        employeeRepository.deleteById(1L);
+        Optional<Employee> optional = employeeRepository.findById(1L);
         assertThat(optional.isPresent(), is(equalTo(false)));
     }
 
