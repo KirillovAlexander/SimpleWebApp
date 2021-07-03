@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### Grafana and Prometheus
-/config/grafana
-/config/prometheus
+/scripts/grafana
+/scripts/prometheus
