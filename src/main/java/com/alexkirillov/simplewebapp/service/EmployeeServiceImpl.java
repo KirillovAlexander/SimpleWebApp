@@ -3,7 +3,8 @@ package com.alexkirillov.simplewebapp.service;
 import com.alexkirillov.simplewebapp.dao.EmployeeRepository;
 import com.alexkirillov.simplewebapp.dto.Employee;
 import com.alexkirillov.simplewebapp.exception.EmployeeServiceNotFoundException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Optional;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private final static Logger logger = Logger.getLogger(EmployeeServiceImpl.class);
+    private final static Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final EmployeeRepository employeeRepository;
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
