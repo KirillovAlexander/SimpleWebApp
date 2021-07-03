@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Grafana and Prometheus
+/config/grafana
+/config/prometheus
