@@ -4,11 +4,11 @@ REST-сервис, предоставляющий интерфейс для ра
 ## Описание
 При создании приложения были использованы:
 - Spring Boot
-- Spring JDBC
+- Spring Data JPA
 - В качестве базы данных - PostgreSQL
 - Сборщик Maven
 - Для запуска используется Docker
-- Логирование с помощью Log4j
+- Логирование с помощью Slf4j
 - OpenAPI документация
 - JUnit, Mockito и Testcontainers для тестирования
 - Liquibase для миграций  
@@ -36,3 +36,11 @@ Rest-сервис для интеграции со сторонними прил
 ## Swagger UI
 После запуска приложения по адресу `http://localhost:8080/swagger-ui.html` доступна OpenAPI 3 документация.
 
+## Изменение уровня логирования
+По эндпоинту `localhost:8080/actuator/loggers/com.alexkirillov.simplewebapp` возможно изменить уровень логирования.
+Для этого необходимо выполнить POST запрос, в теле передать ``{
+"configuredLevel": "УРОВЕНЬ"
+}``, например
+``{
+"configuredLevel": "DEBUG"
+}``
