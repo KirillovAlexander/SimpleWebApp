@@ -1,6 +1,6 @@
 package com.alexkirillov.simplewebapp.service;
 
-import com.alexkirillov.simplewebapp.dao.EmployeeDAO;
+import com.alexkirillov.simplewebapp.dao.EmployeeRepository;
 import com.alexkirillov.simplewebapp.exception.EmployeeServiceNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,8 @@ import org.mockito.Mockito;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class EmployeeServiceImplTest {
 
@@ -16,15 +17,15 @@ class EmployeeServiceImplTest {
 
     @BeforeAll
     public static void init() {
-        EmployeeDAO employeeDAOMock = Mockito.mock(EmployeeDAO.class);
-        Mockito.when(employeeDAOMock.getEmployee(0))
+        EmployeeRepository employeeRepository = Mockito.mock(EmployeeRepository.class);
+        Mockito.when(employeeRepository.findById(0L))
                 .thenReturn(Optional.empty());
-        employeeService = new EmployeeServiceImpl(employeeDAOMock);
+        employeeService = new EmployeeServiceImpl(employeeRepository);
     }
 
     @Test
     void getEmployee() {
-        Throwable thrown = assertThrows(EmployeeServiceNotFoundException.class, () -> employeeService.getEmployee(0));
+        Throwable thrown = assertThrows(EmployeeServiceNotFoundException.class, () -> employeeService.getEmployee(0L));
         assertNotNull(thrown.getMessage());
     }
 }

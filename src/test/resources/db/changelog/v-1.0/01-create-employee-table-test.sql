@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS employee
+CREATE TABLE IF NOT EXISTS employees
 (
     employee_id     BIGSERIAL   PRIMARY KEY ,
     first_name      VARCHAR(30) NOT NULL ,

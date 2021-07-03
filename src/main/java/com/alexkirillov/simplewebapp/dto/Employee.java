@@ -1,34 +1,43 @@
 package com.alexkirillov.simplewebapp.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+@Entity
+@Table(name = "employees")
 public class Employee {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "employee_id")
+    private long id;
+
     @NotBlank
     private String firstName;
+
     @NotBlank
     private String lastName;
+
     @NotNull
     @Positive
     private int departmentId;
+
     @NotNull
     private String jobTitle;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     public Employee() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

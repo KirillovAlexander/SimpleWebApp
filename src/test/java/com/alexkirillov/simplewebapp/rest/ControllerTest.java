@@ -94,7 +94,7 @@ public class ControllerTest {
 
     @Test
     public void whenGetEmployeeByNonExistentID_thenClientError() throws Exception {
-        int is400 = 1;
+        long is400 = 1L;
         when(employeeService.getEmployee(is400)).thenThrow(new EmployeeServiceNotFoundException("No such employee exception"));
         mockMvc.perform(get("/employees/" + is400))
                 .andExpect(status().is4xxClientError())
