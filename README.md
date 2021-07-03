@@ -50,3 +50,4 @@ Rest-сервис для интеграции со сторонними прил
 `docker-compose` скрипт из папки `/config`. Запуск производится командой `docker-compose up --build`.
 Сервис будет поднят по адресу `localhost:3000`. Логин и пароль для входа - `admin` и `admin` соответственно.
 Порт и данные для входа перед запуском можно поменять в файле `/config/docker-compose.yml`.
+![Dashboards](./assets/GrafanaDashboards.png)
