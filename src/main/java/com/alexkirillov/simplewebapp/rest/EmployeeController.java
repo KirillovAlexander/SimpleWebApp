@@ -3,7 +3,6 @@ package com.alexkirillov.simplewebapp.rest;
 import com.alexkirillov.simplewebapp.dto.Employee;
 import com.alexkirillov.simplewebapp.dto.MessageDTO;
 import com.alexkirillov.simplewebapp.service.EmployeeService;
-import com.alexkirillov.simplewebapp.service.EmployeeServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
