@@ -17,6 +17,8 @@
 
     <include file="v-1.1/db.changelog-v.1.1-test.xml" relativeToChangelogFile="true"/>
 
+    <include file="v-1.2/db.changelog-v.1.2-test.xml" relativeToChangelogFile="true"/>
+
     <changeSet id="3" author="a_kirillov">
         <tagDatabase tag="v.1.1"/>
     </changeSet>

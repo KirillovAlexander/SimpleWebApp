@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.Date;
 
 @Entity
 @Table(name = "employees")
@@ -29,6 +30,8 @@ public class Employee {
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    private Date dateOfBirth;
 
     public Employee() {
     }
@@ -81,6 +84,14 @@ public class Employee {
         this.gender = gender;
     }
 
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -90,6 +101,7 @@ public class Employee {
                 ", departmentId=" + departmentId +
                 ", jobTitle='" + jobTitle + '\'' +
                 ", gender=" + gender +
+                ", dateOfBirth=" + dateOfBirth +
                 '}';
     }
 }

@@ -17,10 +17,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(EmployeeController.class)
@@ -31,8 +33,10 @@ public class ControllerTest {
     @MockBean
     EmployeeService employeeService;
 
-    private static Employee testEmployee = new Employee();
-    private static Employee testEmployee1 = new Employee();
+    private static final Employee testEmployee = new Employee();
+    private static final Employee testEmployee1 = new Employee();
+
+    private static final String URL = "/api/employees";
 
     static {
         testEmployee.setId(1);
@@ -58,18 +62,18 @@ public class ControllerTest {
 
         when(employeeService.getAllEmployees()).thenReturn(employees);
 
-        mockMvc.perform(get("/employees"))
+        mockMvc.perform(get(URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.*", hasSize(2)))
 
-                .andExpect(jsonPath("$[0].id", is(testEmployee.getId())))
+                .andExpect(jsonPath("$[0].id", is((int) testEmployee.getId())))
                 .andExpect(jsonPath("$[0].firstName", is(testEmployee.getFirstName())))
                 .andExpect(jsonPath("$[0].lastName", is(testEmployee.getLastName())))
                 .andExpect(jsonPath("$[0].departmentId", is(testEmployee.getDepartmentId())))
                 .andExpect(jsonPath("$[0].jobTitle", is(testEmployee.getJobTitle())))
                 .andExpect(jsonPath("$[0].gender", is(testEmployee.getGender().toString())))
 
-                .andExpect(jsonPath("$[1].id", is(testEmployee1.getId())))
+                .andExpect(jsonPath("$[1].id", is((int) testEmployee1.getId())))
                 .andExpect(jsonPath("$[1].firstName", is(testEmployee1.getFirstName())))
                 .andExpect(jsonPath("$[1].lastName", is(testEmployee1.getLastName())))
                 .andExpect(jsonPath("$[1].departmentId", is(testEmployee1.getDepartmentId())))
@@ -81,10 +85,10 @@ public class ControllerTest {
     public void givenEmployee_whenGetEmployeeByID_thenStatusOkAndEmployeeReturned() throws Exception {
 
         when(employeeService.getEmployee(testEmployee.getId())).thenReturn(testEmployee);
-        mockMvc.perform(get("/employees/" + testEmployee.getId()))
+        mockMvc.perform(get(URL + "/" + testEmployee.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.id", is(testEmployee.getId())))
+                .andExpect(jsonPath("$.id", is((int) testEmployee.getId())))
                 .andExpect(jsonPath("$.firstName", is(testEmployee.getFirstName())))
                 .andExpect(jsonPath("$.lastName", is(testEmployee.getLastName())))
                 .andExpect(jsonPath("$.departmentId", is(testEmployee.getDepartmentId())))
@@ -96,7 +100,7 @@ public class ControllerTest {
     public void whenGetEmployeeByNonExistentID_thenClientError() throws Exception {
         long is400 = 1L;
         when(employeeService.getEmployee(is400)).thenThrow(new EmployeeServiceNotFoundException("No such employee exception"));
-        mockMvc.perform(get("/employees/" + is400))
+        mockMvc.perform(get(URL + "/" + is400))
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.message", is("No such employee exception")));
@@ -108,12 +112,12 @@ public class ControllerTest {
         when(employeeService.addEmployee(testEmployee)).thenReturn(testEmployee);
         ObjectMapper mapper = new ObjectMapper();
         String testEmployeeAsJson = mapper.writeValueAsString(testEmployee);
-        mockMvc.perform(post("/employees")
+        mockMvc.perform(post(URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(testEmployeeAsJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.id", is(testEmployee.getId())))
+                .andExpect(jsonPath("$.id", is((int) testEmployee.getId())))
                 .andExpect(jsonPath("$.firstName", is(testEmployee.getFirstName())))
                 .andExpect(jsonPath("$.lastName", is(testEmployee.getLastName())))
                 .andExpect(jsonPath("$.departmentId", is(testEmployee.getDepartmentId())))
@@ -126,12 +130,12 @@ public class ControllerTest {
         when(employeeService.updateEmployee(testEmployee.getId(), testEmployee)).thenReturn(testEmployee);
         ObjectMapper mapper = new ObjectMapper();
         String testEmployeeAsJson = mapper.writeValueAsString(testEmployee);
-        mockMvc.perform(post("/employees")
+        mockMvc.perform(put(URL + "/" + testEmployee.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(testEmployeeAsJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.id", is(testEmployee.getId())))
+                .andExpect(jsonPath("$.id", is((int) testEmployee.getId())))
                 .andExpect(jsonPath("$.firstName", is(testEmployee.getFirstName())))
                 .andExpect(jsonPath("$.lastName", is(testEmployee.getLastName())))
                 .andExpect(jsonPath("$.departmentId", is(testEmployee.getDepartmentId())))
