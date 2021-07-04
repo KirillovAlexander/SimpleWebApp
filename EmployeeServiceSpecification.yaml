@@ -1,45 +1,57 @@
 openapi: 3.0.1
 info:
-  title: Employee service API
-  version: v0
+  title: Employees service API
+  description: Employees Information
+  version: '1.0'
 servers:
-  - url: http://localhost:8080
+  - url: 'http://localhost:8080'
     description: local server
+    variables: {}
 paths:
-  /api/employees:
+  '/api/employees/{id}':
     get:
-      summary: Get all Employees
-      description: Call to get the list of employees
       tags:
         - employee-controller
-      operationId: showAllEmployees
+      summary: Get employee by id
+      operationId: getEmployee
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "400":
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Message'
-        "500":
-          description: Internal Server Error
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Message'
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Employee'
+                $ref: '#/components/schemas/Employee'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MessageDTO'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MessageDTO'
     put:
-      summary: Add new Employee
-      description: Call to create new Employee
       tags:
         - employee-controller
+      summary: Update employee by id
       operationId: updateEmployee
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       requestBody:
         content:
           application/json:
@@ -47,29 +59,86 @@ paths:
               $ref: '#/components/schemas/Employee'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Message'
-        "500":
-          description: Internal Server Error
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Message'
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Employee'
-    post:
-      summary: Update Employee
-      description: Call to update Employee info
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MessageDTO'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MessageDTO'
+    delete:
       tags:
         - employee-controller
+      summary: Delete employee
+      operationId: deleteEmployee
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MessageDTO'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MessageDTO'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MessageDTO'
+  /api/employees:
+    get:
+      tags:
+        - employee-controller
+      summary: Get all employees
+      operationId: showAllEmployees
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Employee'
+        '404':
+          description: Not Found
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MessageDTO'
+        '500':
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/MessageDTO'
+    post:
+      tags:
+        - employee-controller
+      summary: Create employee
       operationId: addEmployee
       requestBody:
         content:
@@ -78,91 +147,31 @@ paths:
               $ref: '#/components/schemas/Employee'
         required: true
       responses:
-        "400":
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Message'
-        "500":
-          description: Internal Server Error
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Message'
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Employee'
-  /api/employees/{id}:
-    get:
-      summary: Get an Employee by ID
-      description: Call to get an employee by id
-      tags:
-        - employee-controller
-      operationId: getEmployee
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
-      responses:
-        "400":
-          description: Bad Request
+        '404':
+          description: Not Found
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Message'
-        "500":
+                $ref: '#/components/schemas/MessageDTO'
+        '500':
           description: Internal Server Error
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Message'
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Employee'
-    delete:
-      summary: Delete employee by ID
-      description: Call to delete employee
-      tags:
-        - employee-controller
-      operationId: deleteEmployee
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int32
-      responses:
-        "400":
-          description: Bad Request
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Message'
-        "500":
-          description: Internal Server Error
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Message'
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Message'
+                $ref: '#/components/schemas/MessageDTO'
 components:
   schemas:
+    MessageDTO:
+      type: object
+      properties:
+        message:
+          type: string
     Employee:
       required:
         - departmentId
@@ -173,7 +182,7 @@ components:
       properties:
         id:
           type: integer
-          format: int32
+          format: int64
         firstName:
           type: string
         lastName:
@@ -188,9 +197,3 @@ components:
           enum:
             - MALE
             - FEMALE
-
-    Message:
-      type: object
-      properties:
-        message:
-          type: string
