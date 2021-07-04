@@ -1,5 +1,7 @@
 package com.alexkirillov.simplewebapp.dto;
 
+import com.alexkirillov.simplewebapp.dto.validation.Adult;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -31,6 +33,7 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Adult
     private Date dateOfBirth;
 
     public Employee() {
