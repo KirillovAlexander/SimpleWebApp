@@ -113,7 +113,7 @@
                 </executions>
                 <configuration>
                     <apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
-                    <outputFileName>openapi.yaml</outputFileName>
+                    <outputFileName>openapi.yml</outputFileName>
                     <outputDir>${project.basedir}</outputDir>
                 </configuration>
             </plugin>
