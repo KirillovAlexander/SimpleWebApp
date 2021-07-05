@@ -5,6 +5,8 @@ import com.alexkirillov.simplewebapp.dto.Employee;
 import com.alexkirillov.simplewebapp.exception.EmployeeServiceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final static Logger logger = LoggerFactory.getLogger(EmployeeServiceImpl.class);
     private final EmployeeRepository employeeRepository;
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
         this.employeeRepository = employeeRepository;
@@ -28,27 +33,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee getEmployee(long id) {
-        logger.info("getEmployee(id) with id = " + id);
+        logger.info("getEmployee(id) with id = {}", id);
         Optional<Employee> optional = employeeRepository.findById(id);
         return optional.orElseThrow(() -> new EmployeeServiceNotFoundException("Employee with id " + id + " not founded."));
     }
 
     @Override
     public Employee addEmployee(Employee employee) {
-        logger.info("addEmployee(employee) with employee = " + employee);
+        logger.info("addEmployee(employee) with employee = {}", employee);
         return employeeRepository.save(employee);
     }
 
     @Override
     public Employee updateEmployee(long id, Employee employee) {
         employee.setId(id);
-        logger.info("updateEmployee(employee) with employee = " + employee);
+        logger.info("updateEmployee(employee) with employee = {}", employee);
         return employeeRepository.save(employee);
     }
 
     @Override
     public void deleteEmployee(long id) {
-        logger.info("deleteEmployee(id) with id = " + id);
-        employeeRepository.deleteById(id);
+        logger.info("deleteEmployee(id) with id = {}", id);
+        jmsTemplate.convertAndSend("EmployeesServiceDeleteEmployee", id);
     }
 }

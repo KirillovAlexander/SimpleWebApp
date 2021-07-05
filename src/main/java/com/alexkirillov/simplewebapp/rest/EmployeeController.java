@@ -65,5 +65,4 @@ public class EmployeeController {
         employeeService.deleteEmployee(id);
         return new MessageDTO("Employee with id = " + id + " was deleted");
     }
-
 }

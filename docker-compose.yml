@@ -5,6 +5,7 @@ services:
     build: '.'
     ports:
       - 8080:8080
+
   db:
     image: postgres
     environment:
@@ -15,6 +16,19 @@ services:
     - ./docker/volumes/postgres:/var/lib/postgresql/data postgres
     ports:
       - 5433:5432
+
+  active_mq:
+    image: webcenter/activemq
+    environment:
+      ACTIVEMQ_CONFIG_NAME: ActiveMQ_Employees_service
+    volumes:
+    - ./docker/volumes/activemq:/data
+    - ./docker/volumes/log/activemq:/var/log/activemq
+    ports:
+    - 8161:8161
+    - 61616:61616
+    - 61613:61613
+
   grafana:
     build: './scripts/config/grafana'
     ports:
@@ -28,6 +42,7 @@ services:
       monitoring:
         aliases:
           - grafana
+
   prometheus:
     image: prom/prometheus
     ports:
@@ -39,5 +54,6 @@ services:
       monitoring:
         aliases:
           - prometheus
+
 networks:
   monitoring:
