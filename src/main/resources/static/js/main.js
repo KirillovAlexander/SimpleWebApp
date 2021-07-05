@@ -21,6 +21,7 @@ Vue.component('employees-list', {
             lastName: '',
             departmentId: '',
             jobTitle: '',
+            dateOfBirth: '',
             gender: ''
         }
     },
@@ -31,6 +32,7 @@ Vue.component('employees-list', {
         '<input type="text" placeholder="Surname" v-model="lastName"/><br>' +
         '<input type="text" placeholder="Department id" v-model="departmentId"/><br>' +
         '<input type="text" placeholder="Job title" v-model="jobTitle"/><br>' +
+        '<input type="text" placeholder="Date of birth [YYYY-MM-DD]" v-model="dateOfBirth"/><br>' +
         '<select class="form-input-select" placeholder="Gender" v-model="gender" required>\n' +
         '    <option value="MALE" selected>MALE</option>\n' +
         '    <option value="FEMALE">FEMALE</option>\n' +
@@ -45,6 +47,7 @@ Vue.component('employees-list', {
         '       <th align="center">Surname</th>' +
         '       <th nowrap="true" align="center">Department id</th>' +
         '       <th align="center">Job title</th>' +
+        '       <th align="center">Date of birth</th>' +
         '       <th align="center">Gender</th>' +
         '       <th align="center">Edit</th>' +
         '       <th align="center">Delete</th>' +
@@ -55,6 +58,7 @@ Vue.component('employees-list', {
         '      <td align="center"> {{ employee.lastName }}</td>\n' +
         '      <td align="center"> {{ employee.departmentId }}</td>\n' +
         '      <td align="center"> {{ employee.jobTitle }}</td>\n' +
+        '      <td align="center"> {{ employee.dateOfBirth }}</td>\n' +
         '      <td align="center"> {{ employee.gender }}</td>\n' +
         '      <td align="center"> <input type="button" class="double-border-button" value="Edit" @click="edit(employee)"/> </td>\n' +
         '      <td align="center"> <input type="button" class="double-border-button" value="X" @click="del(employee)" /></td>\n' +
@@ -65,28 +69,32 @@ Vue.component('employees-list', {
     methods: {
         save: function() {
             if(this.id == 0) {
-                employeeApi.save({}, { firstName: this.firstName, lastName: this.lastName, departmentId: this.departmentId, jobTitle: this.jobTitle, gender: this.gender }).then(result =>
+                employeeApi.save({}, { firstName: this.firstName, lastName: this.lastName, departmentId: this.departmentId, jobTitle: this.jobTitle, dateOfBirth: this.dateOfBirth, gender: this.gender }).then(result =>
                     result.json().then(data => {
+                        data.dateOfBirth = data.dateOfBirth.substring(0, 10);
                         this.employees.push(data);
                         this.id = 0,
                         this.firstName = '';
                         this.lastName = '';
                         this.departmentId ='';
                         this.jobTitle = '';
+                        this.dateOfBirth = '';
                         this.gender = '';
                     })
                 );
             } else {
-                employeeApi.update({ id: this.id }, { id: this.id, firstName: this.firstName, lastName: this.lastName, departmentId: this.departmentId, jobTitle: this.jobTitle, gender: this.gender }).then(result =>
+                employeeApi.update({ id: this.id }, { id: this.id, firstName: this.firstName, lastName: this.lastName, departmentId: this.departmentId, jobTitle: this.jobTitle, dateOfBirth: this.dateOfBirth, gender: this.gender }).then(result =>
                     result.json().then(data => {
                         //в data нам вернулся изменённый объект employee, находим его индекс в массиве employees
                         var index = getIndex(this.employees, this.id);
                         //старый employee удаляем из employees, а на его место вставляем новый объект с сервера
+                        data.dateOfBirth = data.dateOfBirth.substring(0, 10);
                         this.employees.splice(index, 1, data);
                         this.firstName = '';
                         this.lastName = '';
                         this.departmentId = '';
                         this.jobTitle = '';
+                        this.dateOfBirth = '';
                         this.gender = '';
                         this.id = 0;
                     })
@@ -101,6 +109,7 @@ Vue.component('employees-list', {
             this.lastName = employee.lastName;
             this.departmentId = employee.departmentId;
             this.jobTitle = employee.jobTitle;
+            this.dateOfBirth = employee.dateOfBirth.substring(0,10);
             this.gender = employee.gender;
         },
         del: function(employee) {
@@ -109,13 +118,12 @@ Vue.component('employees-list', {
             employeeApi.remove({ id: employee.id }).then(result => {
                 if(result.ok) {
                     this.employees.splice(this.employees.indexOf(employee), 1);
-                    //также очищаем поля message_id и message_text,
-                    // т.к. message может уже быть помещён в поле редактирования
                     this.id = 0;
                     this.firstName = '';
                     this.lastName = '';
                     this.departmentId = '';
                     this.jobTitle = '';
+                    this.dateOfBirth = '';
                     this.gender = '';
                 }
             });
@@ -125,7 +133,10 @@ Vue.component('employees-list', {
     created: function() {
         employeeApi.get().then(result =>
             result.json().then(data =>
-                data.forEach(employee => this.employees.push(employee))
+                data.forEach(employee => {
+                    employee.dateOfBirth = employee.dateOfBirth.substring(0, 10);
+                    this.employees.push(employee)
+                })
             )
         );
     }
