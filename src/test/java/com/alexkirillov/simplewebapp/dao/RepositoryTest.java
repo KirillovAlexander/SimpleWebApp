@@ -13,12 +13,18 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
+import javax.validation.ConstraintViolationException;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /*
     Tests use data from test/resources/db/changelog/v-1.1/10-insert-employee-data.sql
@@ -64,13 +70,14 @@ public class RepositoryTest {
     }
 
     @Test
-    public void givenEmployee_whenAddEmployee_thenEmployeeExist() {
+    public void givenEmployee_whenAddEmployee_thenEmployeeExist() throws ParseException {
         Employee testEmployee = new Employee();
         testEmployee.setFirstName("TestName");
         testEmployee.setLastName("TestLastName");
         testEmployee.setDepartmentId(1);
         testEmployee.setJobTitle("TestJobTitle");
         testEmployee.setGender(Gender.FEMALE);
+        testEmployee.setDateOfBirth(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1990"));
 
         employeeRepository.save(testEmployee);
         Optional<Employee> optional = employeeRepository.findById(3L);
@@ -78,7 +85,7 @@ public class RepositoryTest {
     }
 
     @Test
-    public void givenEmployee_whenUpdate_thenEmployeeExistAndReturned() {
+    public void givenEmployee_whenUpdate_thenEmployeeExistAndReturned() throws ParseException {
         Employee testEmployee = new Employee();
         testEmployee.setId(2L);
         testEmployee.setFirstName("TestNameUpd");
@@ -86,6 +93,7 @@ public class RepositoryTest {
         testEmployee.setDepartmentId(2);
         testEmployee.setJobTitle("TestJobTitleUpd");
         testEmployee.setGender(Gender.MALE);
+        testEmployee.setDateOfBirth(new SimpleDateFormat("dd/MM/yyyy").parse("01/01/1990"));
 
         employeeRepository.save(testEmployee);
         Optional<Employee> optional = employeeRepository.findById(testEmployee.getId());
@@ -105,5 +113,17 @@ public class RepositoryTest {
         assertThat(optional.isPresent(), is(equalTo(false)));
     }
 
+    @Test
+    public void givenEmployeeNotAdult_whenAddEmployee_thenTransactionException() {
+        Employee testEmployee = new Employee();
+        testEmployee.setFirstName("TestName");
+        testEmployee.setLastName("TestLastName");
+        testEmployee.setDepartmentId(1);
+        testEmployee.setJobTitle("TestJobTitle");
+        testEmployee.setGender(Gender.FEMALE);
+        testEmployee.setDateOfBirth(new Date(System.currentTimeMillis()));
 
+        Throwable thrown = assertThrows(ConstraintViolationException.class, () -> employeeRepository.save(testEmployee));
+        assertNotNull(thrown.getMessage());
+    }
 }

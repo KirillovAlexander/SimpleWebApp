@@ -35,3 +35,6 @@ build/
 ### Grafana and Prometheus
 /scripts/grafana
 /scripts/prometheus
+
+### Docker
+/docker/
