@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,9 +46,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public Employee updateEmployee(long id, Employee employee) {
-        employee.setId(id);
         logger.info("updateEmployee(employee) with employee = {}", employee);
+        Optional<Employee> optional = employeeRepository.findById(id);
+        if (optional.isEmpty()) throw new EmployeeServiceNotFoundException("Employee with id " + id + " not founded.");
+        employee.setId(id);
         return employeeRepository.save(employee);
     }
 
